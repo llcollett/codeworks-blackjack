@@ -1,31 +1,7 @@
 
-function game() {
-    // the game starts by the dealer drawing two cards
-    let firstCard = Math.ceil(Math.random() * 11);
-    let secondCard = Math.ceil(Math.random() * 11);
-    // the total score of the first two cards is calculated
-    let score = firstCard + secondCard;
-    // score is given
-    console.log(score);
-    // player is asked to make a decision based on the total score of the two cards
-    if (score === 21) {
-      console.log("BLACKJACK!");
-    }
-    else if (score > 21) {
-      console.log("BUST");
-    }
-    else if (score < 21) {
-      console.log("Would you like to stick or twist?");
-    }
-  }
-  
-  game();
-  console.log(4 % 2);
-
-// NEWEST WORKING CODE
 // specifications of cards to create a deck
 var suits = ['clubs', 'diamonds', 'hearts', 'spades'];
-var ranks = ['two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king', 'ace'];
+var ranks = ['ace','two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king'];
 // indexes of cards and deck
 const suitsIndex = [];
 const ranksIndex = [];
@@ -60,9 +36,94 @@ function shuffleDeck() {
 // run functions
 createDeck();
 shuffleDeck();
+//console.log(shuffledDeck);
+// create scores from shuffled deck using modular arithmetic
+const scores = shuffledDeck.slice();
+for (let i = 0; i < scores.length; i++) {
+  scores[i] = (scores[i] % 13) + 1;
+  if (scores[i] === 1) {
+    scores[i] = 11;
+  }
+  else if (scores[i] > 10) {
+    scores[i] = 10;
+  }
+}
+//console.log(shuffledDeck);
+//console.log(scores);
 // map to names of cards
 const game = [];
 for (let i = 0; i < deckIndex.length; i++) {
   game.push(deck[shuffledDeck[i]]);
 }
-console.log(game);
+//console.log(game);
+function drawTwo() {
+  console.log("You have drawn a " + game[0] + " and a " + game[1]);
+  const drawTwoTotal = scores[0] + scores[1];
+  console.log("Your total is: " + drawTwoTotal);
+  if (drawTwoTotal === 21 ) {
+    console.log("BLACKJACK");
+  }
+  else if (drawTwoTotal > 21) {
+    console.log("BUST");
+  }
+  else if (drawTwoTotal < 21) {
+    console.log("Stick or twist?");
+  }
+}
+function draw1st() {
+  console.log("You have drawn a "+ game[2]);
+  const draw1stTotal = scores[0] + scores[1] + scores[2];
+  console.log("Your total is now: " + draw1stTotal);
+  if (draw1stTotal === 21 ) {
+    console.log("BLACKJACK");
+  }
+  else if (draw1stTotal > 21) {
+    console.log("BUST");
+  }
+  else if (draw1stTotal < 21) {
+    console.log("Stick or twist?");
+  }
+}
+function player2ndChoice(choice) {
+  if (choice.toLowerCase() === 'stick') {
+    const finalScore = scores[0] + scores[1];
+    console.log("Stick! Your final score is " + finalScore);
+  }
+  else if (choice.toLowerCase() === 'twist') {
+    draw1st();
+  }
+  else {
+    console.log("Please state a valid choice.");
+  }
+}
+function draw2nd() {
+  console.log("You have drawn a "+ game[3]);
+  const draw2ndTotal = scores[0] + scores[1] + scores[2] + scores[3];
+  console.log("Your total is now: " + draw2ndTotal);
+  if (draw2ndTotal === 21 ) {
+    console.log("BLACKJACK");
+  }
+  else if (draw2ndTotal > 21) {
+    console.log("BUST");
+  }
+  else if (draw2ndTotal < 21) {
+    console.log("Stick or twist?");
+  }
+}
+function player3rdChoice(choice) {
+  if (choice.toLowerCase() === 'stick') {
+    const finalScore = scores[0] + scores[1] + scores[2];
+    console.log("Stick! Your final score is " + finalScore);
+  }
+  else if (choice.toLowerCase() === 'twist') {
+    draw2nd();
+  }
+  else {
+    console.log("Please state a valid choice.");
+  }
+}
+
+// gameplay
+drawTwo();
+player2ndChoice('twist');
+player3rdChoice('stick');
