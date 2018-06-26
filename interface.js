@@ -5,6 +5,7 @@ $(document).ready(() => {
     $('#deal-instructions').hide();
     $('#start').on('click', () => {
         $('#cards').toggle();
+        $('#deal-instructions').show();
     })
 
     $('#cards').on('click', () => {
