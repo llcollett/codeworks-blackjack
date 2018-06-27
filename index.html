@@ -7,25 +7,27 @@
     <body>
         <header>
             <div class="head-text">
+
                 <h1>DO A GAME MATE</h1>
                 <h2>Wanna play some blackjack? Cool, let's do this.</h2>
-                <p>The rules are simple: you start your hand with two cards,
-                    and after every draw you have the choice of whether to stick
-                    or twist. The aim of the game is to get a score as close
-                    to 21 as possible without going over. If your score is over 21
-                    then you bust. If you get a total of 21, you win blackjack! 
-                    Have fun!
-                </p>
+
+                <p>The rules are simple: you receive two cards, then you are given the choice of whether to stand (settle for your current score) or hit (draw another card). The aim of the game is to get a score as close to 21 as possible without going over. If your score is over 21 then you bust. If you get a total of 21, you win blackjack! Have fun!</p>
+                
+                <button id="start-button">Start game</button>
+
             </div>
-            <div>
-                <button id="start">Start game</button>
-                <br>
-                <p id="deal-instructions">Just click on the deck when you're ready
-                        and you will be dealt two cards!</p>
-                <img src="https://static1.squarespace.com/static/50cc05aae4b0409d24422851/t/53989b7ce4b0b94398c74526/1402510220532/Gnostic-Lappas-Cards-Only-no-background.png?format=500w" 
-                     id="cards" />
-                <br>
-                <button id="reset">Reset</button>
+            <div class="deal-instructions">
+                <p>When you're ready, click on deal and you will be dealt two cards!</p>
+            </div>
+            <button id="deal-button">Deal</button>
+            <p id="message"></p>
+            <p id="bust"></p>
+            <p id="blackjack"></p>
+            <p id="stand"></p>
+            <div class="gameplay">
+                <button id="hit-button">Hit</button>
+                <button id="stand-button">Stand</button>
+                <button id="reset-button">Reset</button>
             </div>
         </header>
 
@@ -36,5 +38,6 @@
         crossorigin="anonymous"></script>
         <script src="interface.js"></script>
         <script src="game.js"></script>
+
     </body>
 </html>

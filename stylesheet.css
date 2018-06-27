@@ -1,8 +1,15 @@
+
+
 body {
     font-family: Georgia;
     background-color: rgba(0, 102, 255, 0.1);
 }
-#cards {
-    height: 300px;
-    width: auto;
+
+#bust, #stand {
+	font-size: 50px;
+}
+
+#blackjack {
+	font-size: 50px;
+	font-color: rgba(255, 0, 0, 0.8);
 }

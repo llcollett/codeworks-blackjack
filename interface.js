@@ -1,23 +1,47 @@
-
 $(document).ready(() => {
 
-    $('#cards').hide();
-    $('#deal-instructions').hide();
-    $('#reset').hide();
-    $('#start').on('click', () => {
-        $('#cards').show();
-        $('#deal-instructions').show();
-        $('#reset').show();
-    })
+    let game = new Game();
 
-    $('#cards').on('click', () => {
-        //Game.deal();
-    })
+    $('.deal-instructions').hide();
+    $('#deal-button').hide();
+    $('.gameplay').hide();
+    $('#start-button').on('click', () => {
 
-    $('#reset').on('click', () => {
-        $('#cards').hide();
-        $('#deal-instructions').hide();
-        $('#reset').hide();
-    })
+        $('.deal-instructions').show();
+        $('#deal-button').show();
+        $('#start-button').hide();
+
+    });
+
+    $('#deal-button').on('click', () => {
+
+        $("#deal-button").prop('disabled', true);
+        $('.gameplay').show();
+
+        game.play();
+
+    });
+
+    $('#hit-button').on('click', () => {
+
+        game.hit();
+
+    });
+
+    $('#stand-button').on('click', () => {
+
+        game.stand();
+
+    });
+
+    $('#reset-button').on('click', () => {
+
+        game.reset();
+
+        $('.deal-instructions').hide();
+        $('#deal-button').hide();
+        $('.gameplay').hide();
+        $('#start-button').show();
+    });
 
 })

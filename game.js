@@ -1,129 +1,199 @@
-
 // create game
 function Game() {
+
+  // hand
   this.hand = [];
+  this.includesAce = false;
   this.score = 0;
-  this.drawId = 0;
-  this.maxCards = 5;
-  // deck stuff
+  this.card = 0;
+
+  // deck
   this.suits = ['clubs', 'diamonds', 'hearts', 'spades'];
 	this.ranks = ['ace','two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king'];
-  this.deckIndex = [];
-  this.deckShuffled = [];
-  this.names = [];
   this.deck = [];
-  this.deckScores = [];
+  this.scores = [];
+
 }
 
+// game play
 Game.prototype.play = function() {
-  // shuffle deck
-  this.shuffleDeckToStart();
-  // dealer draws two cards
-  this.dealerDraw();
-  if (this.blackjack()) {}
+
+  let text = "";
+  this.createDeck();
+  this.deal();
+
+  // conditionals
+  if (this.score > 21) {
+    this.bust();
+  }
+  else if (this.score === 21) {
+    this.blackjack();
+  }
   else {
-    
+    text=`You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.score}. hit or stand?`
+    $('#message').text(text);
   }
+
 }
 
+// create the deck
 Game.prototype.createDeck = function() {
-  // indexes
-  for (let i = 0; i < this.suits.length * this.ranks.length; i++) {
-    this.deckIndex.push(i);
-  }
-  return this.deckIndex;
-}
 
-Game.prototype.shuffle = function() {
-  let max = this.deckIndex.length - 1;
-  while(max >= 0) this.deckShuffled.push(max--)
-    this.deckShuffled.sort(function () {
-      return 0.5 - Math.random()
-    });
-  return this.deckShuffled;
-}
-
-Game.prototype.createNames = function() {
-  // names
+  // uses suits and ranks to create deck
   for (let i = 0; i < this.suits.length; i++) {
     for (let j = 0; j < this.ranks.length; j++) {
-      this.names.push(this.ranks[j] + ' of ' + this.suits[i]);
+      this.deck.push(this.ranks[j] + " of " + this.suits[i]);
     }
   }
-  return this.names;
-}
-
-Game.prototype.deckNames = function() {
-  for (let i = 0; i < this.deckShuffled.length; i++) {
-    this.deck.push(this.names[this.deckShuffled[i]]);
-  }
-  return this.deck;
-}
-
-Game.prototype.deckScores = function() { 
-  for (let i = 0; i < this.scores.length; i++) {
-    this.scores[i] = (this.scores[i] % 13) + 1;
-    if (this.scores[i] > 10) {
-      this.scores[i] = 10;
+  // uses ranks to create scores for each card
+  for (let k = 0; k < this.suits.length * this.ranks.length; k++) {
+    this.scores.push((k % 13) + 1);
+    if (this.scores[k] > 10) {
+      this.scores[k] = 10;
     }
-    else if (this.scores[i] === 1) {
-      this.scores[i] = 11;
+    else if (this.scores[k] === 1) {
+      this.scores[k] = 11;
     }
   }
-  return this.scores;
 }
 
-Game.prototype.shuffleDeckToStart = function() {
-  this.createDeck();
-  this.shuffle();
-  this.createNames();
-  this.deckNames();
-  this.scores = this.deckShuffled.slice();
-  this.deckScores();
+// dealer starts the game
+Game.prototype.deal = function() {
+
+  // player dealt two cards
+  this.pickACard();
+  this.pickACard();
+
 }
 
-Game.prototype.dealerDraw = function() {
-  for (let id = 0; id < 2; id++) {
-    this.score += this.deckScores[id];
-    this.hand.push(this.deckNames[id]);
+// cards are picked at random
+Game.prototype.pickACard = function() {
+
+  // picks a random card from the remaining deck
+  this.card = Math.floor(Math.random() * this.deck.length);
+  this.incrementHand();
+  this.incrementScore();
+
+}
+
+// cards are added to the player's hand
+Game.prototype.incrementHand = function () {
+
+  // puts card from deck into hand
+  this.hand.push(this.deck[this.card]);
+  this.deck.splice(this.card,1);
+
+}
+
+// points are added to the player's score
+Game.prototype.incrementScore = function () {
+  
+  // increments score
+  this.score += this.scores[this.card];
+  this.scores.splice(this.card,1);
+
+  // // changes value of ace to 1 if score would make the player bust
+  // let subHand = [];
+  // for (let i = 0; i < this.hand.length; i++) {
+  //   subHand[i] = this.hand[i].substring(0, 3);
+  // }
+  // this.includesAce = subHand.includes('ace');
+  // if (this.score > 21 && this.includesAce) {
+  //   this.score = this.score - 10;
+  // }
+}
+
+// hit
+Game.prototype.hit = function() {
+
+  let text = "";
+  this.pickACard();
+
+  // conditionals
+  if (this.score > 21) {
+    this.bust();
   }
-}
-
-Game.prototype.twist = function() {
+  else if (this.score === 21) {
+    this.blackjack();
+  }
+  else {
+    // game text
+    text = `You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.score}. hit or stand?`;
+    $('#message').text(text);
+  }
   
 }
 
-Game.prototype.stick = function() {
-  return this.score;
+// stand
+Game.prototype.stand = function() {
+
+  // game text
+  let text = `You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.score}.`;
+  $('#message').text(text);
+  let array = ['Good choice!','Not brave enough...','Wise decision!','Oh, gambling...'];
+  text = `${array[Math.floor(Math.random() * array.length)]}`;
+  $('#stand').text(text);
+
+  // button functionality
+  $("#stand-button").prop('disabled', true);
+  $("#hit-button").prop('disabled', true);
+
 }
 
-Game.prototype.stickOrTwist = function(choice) {
-  
-}
-
-Game.prototype.incrementDraw = function (set) {
-  this.drawId += set;
-};
-
-Game.prototype.incrementScore = function (set) {
-  this.score += set;
-};
-
-
-Game.prototype.blackjack = function() {
-  return this.score === 21;
-}
-
+// bust
 Game.prototype.bust = function() {
-  return this.score > 21;
+
+  // game text
+  let text = `You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.score}.`;
+  $('#message').text(text);
+  text = `BUST!`;
+  $('#bust').text(text);
+
+  // button functionality
+  $("#stand-button").prop('disabled', true);
+  $("#hit-button").prop('disabled', true);
+
 }
 
+// blackjack
+Game.prototype.blackjack = function() {
 
-// tests
-//let hand = [];
-//for (let i = 0; i < 2; i++) {
-//  hand.push(deck[i]);
-//}
-//console.log(deck[0]);
-//console.log(deck[1]);
-//console.log(hand);
+  // game text
+  let text = `You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.score}.`;
+  $('#message').text(text);
+  text = `BLACKJACK!`;
+  $('#blackjack').text(text);
+
+  // button functionality
+  $("#stand-button").prop('disabled', true);
+  $("#hit-button").prop('disabled', true);
+
+}
+
+// reset game
+Game.prototype.reset = function() {
+
+  // new instance of a game
+  game = new Game();
+
+  // resets all aspects of game
+  this.hand = [];
+  this.includesAce = false;
+  this.score = 0;
+  this.card = 0;
+  this.deck = [];
+  this.scores = [];
+
+  // resets all game text
+  $('#bust').text("");
+  $('#blackjack').text("");
+  $('#stand').text("");
+  $('#message').text("");
+
+  // button functionality
+  $("#start-button").prop('disabled', false);
+  $("#deal-button").prop('disabled', false);
+  $("#hit-button").prop('disabled', false);
+  $("#stand-button").prop('disabled', false);
+
+}
