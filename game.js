@@ -3,13 +3,13 @@ function Game() {
 
   // hand
   this.hand = [];
-  this.includesAce = false;
-  this.score = 0;
+  this.score = [];
+  this.totalScore = 0;
   this.card = 0;
 
   // deck
   this.suits = ['clubs', 'diamonds', 'hearts', 'spades'];
-	this.ranks = ['ace','two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king'];
+  this.ranks = ['ace','two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king'];
   this.deck = [];
   this.scores = [];
 
@@ -23,14 +23,14 @@ Game.prototype.play = function() {
   this.deal();
 
   // conditionals
-  if (this.score > 21) {
+  if (this.totalScore > 21) {
     this.bust();
   }
-  else if (this.score === 21) {
+  else if (this.totalScore === 21) {
     this.blackjack();
   }
   else {
-    text=`You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.score}. hit or stand?`
+    text=`You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.totalScore}. hit or stand?`
     $('#message').text(text);
   }
 
@@ -88,19 +88,23 @@ Game.prototype.incrementHand = function () {
 // points are added to the player's score
 Game.prototype.incrementScore = function () {
   
-  // increments score
-  this.score += this.scores[this.card];
+  // increments score without removing from scores so can refer to it later
+  this.score.push(this.scores[this.card]);
+
+  // changes value of ace to 1 if score would make the player bust
+  if (this.totalScore + this.scores[this.card] > 21) {
+    for (let i = 0; i < this.score.length; i++) {
+      if (this.score[i] === 11) {
+        this.score[i] = 1;
+      }
+    }
+  }
+  // removes card score from scores
   this.scores.splice(this.card,1);
 
-  // // changes value of ace to 1 if score would make the player bust
-  // let subHand = [];
-  // for (let i = 0; i < this.hand.length; i++) {
-  //   subHand[i] = this.hand[i].substring(0, 3);
-  // }
-  // this.includesAce = subHand.includes('ace');
-  // if (this.score > 21 && this.includesAce) {
-  //   this.score = this.score - 10;
-  // }
+  // creates total score
+  this.totalScore = this.score.reduce((a, b) => a + b);
+
 }
 
 // hit
@@ -110,15 +114,15 @@ Game.prototype.hit = function() {
   this.pickACard();
 
   // conditionals
-  if (this.score > 21) {
+  if (this.totalScore > 21) {
     this.bust();
   }
-  else if (this.score === 21) {
+  else if (this.totalScore === 21) {
     this.blackjack();
   }
   else {
     // game text
-    text = `You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.score}. hit or stand?`;
+    text = `You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.totalScore}. hit or stand?`;
     $('#message').text(text);
   }
   
@@ -128,10 +132,18 @@ Game.prototype.hit = function() {
 Game.prototype.stand = function() {
 
   // game text
-  let text = `You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.score}.`;
+  let text = `You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.totalScore}.`;
   $('#message').text(text);
-  let array = ['Good choice!','Not brave enough...','Wise decision!','Oh, gambling...'];
-  text = `${array[Math.floor(Math.random() * array.length)]}`;
+  // depending on how close to 21 makes witty comment
+  let arrayClose = ['Good choice!','Wise decision!'];
+  let arrayFar = ['Not brave enough...','Oh, luck...'];
+  if (this.totalScore < 18) {
+    text = `${arrayFar[Math.floor(Math.random() * arrayFar.length)]}`;
+  }
+  else {
+    text = `${arrayClose[Math.floor(Math.random() * arrayClose.length)]}`;
+  }
+  
   $('#stand').text(text);
 
   // button functionality
@@ -144,7 +156,7 @@ Game.prototype.stand = function() {
 Game.prototype.bust = function() {
 
   // game text
-  let text = `You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.score}.`;
+  let text = `You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.totalScore}.`;
   $('#message').text(text);
   text = `BUST!`;
   $('#bust').text(text);
@@ -159,7 +171,7 @@ Game.prototype.bust = function() {
 Game.prototype.blackjack = function() {
 
   // game text
-  let text = `You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.score}.`;
+  let text = `You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.totalScore}.`;
   $('#message').text(text);
   text = `BLACKJACK!`;
   $('#blackjack').text(text);
@@ -178,8 +190,8 @@ Game.prototype.reset = function() {
 
   // resets all aspects of game
   this.hand = [];
-  this.includesAce = false;
-  this.score = 0;
+  this.score = [];
+  this.totalScore = 0;
   this.card = 0;
   this.deck = [];
   this.scores = [];
