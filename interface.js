@@ -2,16 +2,7 @@ $(document).ready(() => {
 
     let game = new Game();
 
-    $('.deal-instructions').hide();
-    $('#deal-button').hide();
     $('.gameplay').hide();
-    $('#start-button').on('click', () => {
-
-        $('.deal-instructions').show();
-        $('#deal-button').show();
-        $('#start-button').hide();
-
-    });
 
     $('#deal-button').on('click', () => {
 
@@ -38,10 +29,8 @@ $(document).ready(() => {
 
         game.reset();
 
-        $('.deal-instructions').hide();
-        $('#deal-button').hide();
+        $('#deal-button').show();
         $('.gameplay').hide();
-        $('#start-button').show();
     });
 
 })
