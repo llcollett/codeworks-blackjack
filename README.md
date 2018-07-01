@@ -7,7 +7,7 @@ Build a simple Blackjack game using HTML, CSS, JavaScript and jQuery. It’s a s
 
 * HTML
 * CSS
-* Javascript
+* JavaScript
 * jQuery
 
 #### Authors:
@@ -16,4 +16,4 @@ Laura Collett
 #### How to Play:
 
 ###### Game Rules
-The aim of the game is to draw cards totalling as close to 21 as possible, without going over. You draw two cards, then can choose whether to stand (settle for your current cards) or hit (draw another card). If your score is over 21 then you bust, if you get 21 you win blackjack!
+The rules are simple: you draw cards, playing against the dealer, to get a score as close to 21 as possible, without going over. Once you have been dealt two cards you are given the choice of whether to stand (settle for your current score) or hit (draw another card). If your score is over 21 then you bust. If you get a total of 21, you win blackjack! Have fun!
