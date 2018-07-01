@@ -1,8 +1,14 @@
 
 
 body {
-    font-family: Georgia;
-    background-color: rgba(0, 102, 255, 0.1);
+	font-family: Georgia, serif;
+	background-color: rgba(49, 122, 196, 0.8);
+	background-clip: padding-box;
+	width: 600px;
+	padding: 10px;
+	margin: 10px;
+	border: 3px solid white;
+	border-radius: 10px;
 }
 
 #bust, #stand {
@@ -11,5 +17,11 @@ body {
 
 #blackjack {
 	font-size: 50px;
-	color: rgba(255, 0, 0, 0.8);
+	color: rgb(255, 0, 0);
+}
+button {
+	font-family: Georgia, serif;
+	background-color: rgba(196, 49, 49, 0.8);
+	padding: 5px 10px;
+	border: 3px solid white;
 }

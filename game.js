@@ -30,7 +30,7 @@ Game.prototype.play = function() {
     this.blackjack();
   }
   else {
-    text=`You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.totalScore}. hit or stand?`
+    text=`You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.totalScore}. Hit or stand?`
     $('#message').text(text);
   }
 
@@ -122,7 +122,7 @@ Game.prototype.hit = function() {
   }
   else {
     // game text
-    text = `You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.totalScore}. hit or stand?`;
+    text = `You have drawn: ${this.hand.join(' and a ')}. Your score is ${this.totalScore}. Hit or stand?`;
     $('#message').text(text);
   }
   
